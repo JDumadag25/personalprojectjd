@@ -42,7 +42,28 @@ const data = {
 
 function App() {
     const [cars, setCars] = useState(data.cars);
+    const [query, setQuery] = useState('');
+    const [filteredList, setFilteredList] = useState([]);
     const [showModal, setShowModal] = useState(false);
+
+    const handleChange = (e) => {
+        const results = cars.filter((car) => {
+            if (e.target.value === '') return cars;
+            return (
+                car.make.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                car.model
+                    .toLowerCase()
+                    .includes(e.target.value.toLowerCase()) ||
+                car.color
+                    .toLowerCase()
+                    .includes(e.target.value.toLowerCase()) ||
+                car.year.includes(e.target.value)
+            );
+        });
+        setQuery(e.target.value);
+        setFilteredList(results);
+    };
+
     return (
         <>
             <div>
@@ -53,11 +74,12 @@ function App() {
                     <form>
                         <div class="my-6 w-60">
                             <input
-                                type="text"
+                                type="search"
+                                value={query}
+                                onChange={handleChange}
                                 id="make"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                 placeholder="Search"
-                                required
                             />
                         </div>
                     </form>
@@ -70,16 +92,33 @@ function App() {
                     <div className="flex-1">Year</div>
                     <div className="flex-1">Color</div>
                 </div>
-                {cars.map((car, i) => {
-                    return (
-                        <div key={`car-${i}`} className="flex flex-row my-2 ">
-                            <div className="flex-1 ">{car.make}</div>
-                            <div className="flex-1 ">{car.model}</div>
-                            <div className="flex-1 ">{car.year}</div>
-                            <div className="flex-1 ">{car.color}</div>
-                        </div>
-                    );
-                })}
+                {query === ''
+                    ? cars.map((car, i) => {
+                          return (
+                              <div
+                                  key={`car-${i}`}
+                                  className="flex flex-row my-2 "
+                              >
+                                  <div className="flex-1 ">{car.make}</div>
+                                  <div className="flex-1 ">{car.model}</div>
+                                  <div className="flex-1 ">{car.year}</div>
+                                  <div className="flex-1 ">{car.color}</div>
+                              </div>
+                          );
+                      })
+                    : filteredList.map((car, i) => {
+                          return (
+                              <div
+                                  key={`car-${i}`}
+                                  className="flex flex-row my-2 "
+                              >
+                                  <div className="flex-1 ">{car.make}</div>
+                                  <div className="flex-1 ">{car.model}</div>
+                                  <div className="flex-1 ">{car.year}</div>
+                                  <div className="flex-1 ">{car.color}</div>
+                              </div>
+                          );
+                      })}
             </div>
             <div>
                 <button
@@ -104,7 +143,22 @@ function App() {
                                 </div>
                                 {/*body*/}
                                 <div className="relative p-6 flex-auto">
-                                    <form>
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            setCars([
+                                                ...cars,
+                                                {
+                                                    id: cars.length,
+                                                    make: e.target[0].value,
+                                                    model: e.target[1].value,
+                                                    year: e.target[2].value,
+                                                    color: e.target[3].value,
+                                                },
+                                            ]);
+                                            setShowModal(false);
+                                        }}
+                                    >
                                         <div class="mb-6">
                                             <label
                                                 for="make"
@@ -161,25 +215,26 @@ function App() {
                                                 required
                                             />
                                         </div>
+                                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                                            <button
+                                                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                type="button"
+                                                onClick={() =>
+                                                    setShowModal(false)
+                                                }
+                                            >
+                                                Close
+                                            </button>
+                                            <button
+                                                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                type="submit"
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
                                 {/*footer*/}
-                                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                    <button
-                                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={() => setShowModal(false)}
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={() => setShowModal(false)}
-                                    >
-                                        Add
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
