@@ -45,6 +45,7 @@ function App() {
     const [query, setQuery] = useState('');
     const [filteredList, setFilteredList] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [currentCar, setCurrentCar] = useState(-1);
 
     const handleChange = (e) => {
         const results = cars.filter((car) => {
@@ -62,6 +63,16 @@ function App() {
         });
         setQuery(e.target.value);
         setFilteredList(results);
+    };
+
+    const editCar = (i) => {
+        setCurrentCar(i);
+        setShowModal(true);
+    };
+
+    const addCar = (i) => {
+        setCurrentCar(-1);
+        setShowModal(true);
     };
 
     return (
@@ -98,6 +109,7 @@ function App() {
                               <div
                                   key={`car-${i}`}
                                   className="flex flex-row my-2 "
+                                  onClick={() => editCar(i)}
                               >
                                   <div className="flex-1 ">{car.make}</div>
                                   <div className="flex-1 ">{car.model}</div>
@@ -123,7 +135,7 @@ function App() {
             <div>
                 <button
                     type="button"
-                    onClick={() => setShowModal(true)}
+                    onClick={() => addCar()}
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                     Add
@@ -170,6 +182,10 @@ function App() {
                                                 type="text"
                                                 id="make"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                                defaultValue={
+                                                    (cars[currentCar] || {})
+                                                        .make
+                                                }
                                                 required
                                             />
                                         </div>
@@ -184,6 +200,10 @@ function App() {
                                                 type="text"
                                                 id="model"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                                defaultValue={
+                                                    (cars[currentCar] || {})
+                                                        .model
+                                                }
                                                 required
                                             />
                                         </div>
@@ -198,6 +218,10 @@ function App() {
                                                 type="text"
                                                 id="year"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                                defaultValue={
+                                                    (cars[currentCar] || {})
+                                                        .year
+                                                }
                                                 required
                                             />
                                         </div>
@@ -212,6 +236,10 @@ function App() {
                                                 type="text"
                                                 id="color"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                                defaultValue={
+                                                    (cars[currentCar] || {})
+                                                        .color
+                                                }
                                                 required
                                             />
                                         </div>
