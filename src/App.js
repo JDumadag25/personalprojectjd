@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import * as uuid from 'uuid';
 const data = {
     cars: [
         {
@@ -104,33 +104,37 @@ function App() {
                     <div className="flex-1">Color</div>
                 </div>
                 {query === ''
-                    ? cars.map((car, i) => {
-                          return (
-                              <div
-                                  key={`car-${i}`}
-                                  className="flex flex-row my-2 "
-                                  onClick={() => editCar(i)}
-                              >
-                                  <div className="flex-1 ">{car.make}</div>
-                                  <div className="flex-1 ">{car.model}</div>
-                                  <div className="flex-1 ">{car.year}</div>
-                                  <div className="flex-1 ">{car.color}</div>
-                              </div>
-                          );
-                      })
-                    : filteredList.map((car, i) => {
-                          return (
-                              <div
-                                  key={`car-${i}`}
-                                  className="flex flex-row my-2 "
-                              >
-                                  <div className="flex-1 ">{car.make}</div>
-                                  <div className="flex-1 ">{car.model}</div>
-                                  <div className="flex-1 ">{car.year}</div>
-                                  <div className="flex-1 ">{car.color}</div>
-                              </div>
-                          );
-                      })}
+                    ? cars
+                          .sort((a, b) => a.id - b.id)
+                          .map((car, i) => {
+                              return (
+                                  <div
+                                      key={`car-${i}`}
+                                      className="flex flex-row my-2 "
+                                      onClick={() => editCar(i)}
+                                  >
+                                      <div className="flex-1 ">{car.make}</div>
+                                      <div className="flex-1 ">{car.model}</div>
+                                      <div className="flex-1 ">{car.year}</div>
+                                      <div className="flex-1 ">{car.color}</div>
+                                  </div>
+                              );
+                          })
+                    : filteredList
+                          .sort((a, b) => a.id - b.id)
+                          .map((car, i) => {
+                              return (
+                                  <div
+                                      key={`car-${i}`}
+                                      className="flex flex-row my-2 "
+                                  >
+                                      <div className="flex-1 ">{car.make}</div>
+                                      <div className="flex-1 ">{car.model}</div>
+                                      <div className="flex-1 ">{car.year}</div>
+                                      <div className="flex-1 ">{car.color}</div>
+                                  </div>
+                              );
+                          })}
             </div>
             <div>
                 <button
@@ -158,14 +162,23 @@ function App() {
                                     <form
                                         onSubmit={(e) => {
                                             e.preventDefault();
+                                            console.log(cars[currentCar]);
                                             setCars([
-                                                ...cars,
+                                                ...cars.filter(
+                                                    (car) =>
+                                                        car.id !==
+                                                        (cars[currentCar] || {})
+                                                            .id
+                                                ),
                                                 {
-                                                    id: cars.length,
                                                     make: e.target[0].value,
                                                     model: e.target[1].value,
                                                     year: e.target[2].value,
                                                     color: e.target[3].value,
+                                                    id: (
+                                                        cars[currentCar] ||
+                                                        uuid.v4()
+                                                    ).id,
                                                 },
                                             ]);
                                             setShowModal(false);
