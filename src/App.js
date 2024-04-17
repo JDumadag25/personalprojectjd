@@ -109,14 +109,14 @@ function App() {
     };
 
     return (
-        <>
+        <div className="m-20">
             <div>
-                <h1 className="text-3xl font-bold underline">Car Inventory</h1>
+                <h1 className="text-3xl font-bold">Car Inventory</h1>
             </div>
-            <div>
+            <div className="flex flex-row my-4">
                 <div>
                     <form>
-                        <div class="my-6 w-60">
+                        <div className="mr-5">
                             <input
                                 type="search"
                                 value={query}
@@ -128,9 +128,18 @@ function App() {
                         </div>
                     </form>
                 </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => addCar()}
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                        Add
+                    </button>
+                </div>
             </div>
-            <div>
-                <div className="flex flex-row border-black border-2">
+            <div className="flex-1 ">
+                <div className="flex flex-row justify-start h-10 items-center border-black border-2 ">
                     <div className="flex-1">Make</div>
                     <div className="flex-1">Model</div>
                     <div className="flex-1">Year</div>
@@ -143,7 +152,7 @@ function App() {
                               return (
                                   <div
                                       key={`car-${i}`}
-                                      className="flex flex-row my-2 "
+                                      className="flex flex-row h-10 items-center hover:bg-gray-400"
                                       onClick={() => editCar(i)}
                                   >
                                       <div className="flex-1 ">{car.make}</div>
@@ -159,7 +168,7 @@ function App() {
                               return (
                                   <div
                                       key={`car-${i}`}
-                                      className="flex flex-row my-2 "
+                                      className="flex flex-row my-2 hover:bg-gray-400"
                                   >
                                       <div className="flex-1 ">{car.make}</div>
                                       <div className="flex-1 ">{car.model}</div>
@@ -169,15 +178,7 @@ function App() {
                               );
                           })}
             </div>
-            <div>
-                <button
-                    type="button"
-                    onClick={() => addCar()}
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                    Add
-                </button>
-            </div>
+
             {showModal ? (
                 <>
                     <div className="justify-center flex-1 fixed inset-0 z-50">
@@ -186,9 +187,15 @@ function App() {
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <h3 className="text-3xl font-semibold">
-                                        Add New Car
-                                    </h3>
+                                    {cars[currentCar] ? (
+                                        <h3 className="text-3xl font-semibold">
+                                            Edit Car
+                                        </h3>
+                                    ) : (
+                                        <h3 className="text-3xl font-semibold">
+                                            Add New Car
+                                        </h3>
+                                    )}
                                 </div>
                                 {/*body*/}
                                 <div className="relative p-6 flex-auto">
@@ -290,7 +297,7 @@ function App() {
                     </div>
                 </>
             ) : null}
-        </>
+        </div>
     );
 }
 
