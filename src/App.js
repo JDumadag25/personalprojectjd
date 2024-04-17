@@ -75,6 +75,39 @@ function App() {
         setShowModal(true);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(cars[currentCar]);
+        if (cars[currentCar]) {
+            setCars(
+                cars.map((car) => {
+                    return car.id === cars[currentCar].id
+                        ? {
+                              id: cars[currentCar].id,
+                              make: e.target[0].value,
+                              model: e.target[1].value,
+                              year: e.target[2].value,
+                              color: e.target[3].value,
+                          }
+                        : car;
+                })
+            );
+        } else {
+            setCars([
+                ...cars,
+                {
+                    id: uuid.v4(),
+                    make: e.target[0].value,
+                    model: e.target[1].value,
+                    year: e.target[2].value,
+                    color: e.target[3].value,
+                },
+            ]);
+        }
+
+        setShowModal(false);
+    };
+
     return (
         <>
             <div>
@@ -159,31 +192,7 @@ function App() {
                                 </div>
                                 {/*body*/}
                                 <div className="relative p-6 flex-auto">
-                                    <form
-                                        onSubmit={(e) => {
-                                            e.preventDefault();
-                                            console.log(cars[currentCar]);
-                                            setCars([
-                                                ...cars.filter(
-                                                    (car) =>
-                                                        car.id !==
-                                                        (cars[currentCar] || {})
-                                                            .id
-                                                ),
-                                                {
-                                                    make: e.target[0].value,
-                                                    model: e.target[1].value,
-                                                    year: e.target[2].value,
-                                                    color: e.target[3].value,
-                                                    id: (
-                                                        cars[currentCar] ||
-                                                        uuid.v4()
-                                                    ).id,
-                                                },
-                                            ]);
-                                            setShowModal(false);
-                                        }}
-                                    >
+                                    <form onSubmit={(e) => handleSubmit(e)}>
                                         <div class="mb-6">
                                             <label
                                                 for="make"
